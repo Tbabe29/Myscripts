@@ -845,16 +845,16 @@ Set TotalAmount = @OtherTithe+@MinTithe  where  Label = 'C'
 End
 --Stored procedure for selects---
 -----------------------------------------------------
-CREATE Proc GenerateRemittanceDetail
+Create Proc GenerateRemittanceDetail
 As
-Select S.Title,S.Label,S.TotalAmount,D.DestinationName,Sb.Percentage,((S.TotalAmount/100) * Sb.Percentage) As figure
+Select S.Orders,S.SectionId,S.Title,S.Label,S.TotalAmount,D.DestinationName,Sb.Percentage,((S.TotalAmount/100) * Sb.Percentage) As figure
 From Section S
 Join Subsection Sb
 On S.SectionId = Sb.SectionId
 Join Destination D
 On Sb.DestinationId = D.DestinationId
 where S.IsActive = 1
-Group by S.Label,S.Title,S.TotalAmount,D.DestinationName,Sb.Percentage
+Group by S.Orders,S.SectionId,S.Label,S.Title,S.TotalAmount,D.DestinationName,Sb.Percentage
 ------------------------
 Create Proc GenerateRemittanceSummary
 As
@@ -895,73 +895,73 @@ Group by GroupName)yy
 ---These 2 Above are used in the update Below to have all the result in one stored procedure.
 ------------Procedure To Update Section-------------------------
 Create Proc UpdateSection
-@TotalAmountA Smallmoney,
-@TotalAmountB Smallmoney,
-@TotalAmountD Smallmoney,
-@TotalAmountE Smallmoney,
-@TotalAmountF Smallmoney,
-@TotalAmountG Smallmoney,
-@TotalAmountH Smallmoney,
-@TotalAmountI Smallmoney,
-@TotalAmountJ Smallmoney,
-@TotalAmountK Smallmoney,
-@TotalAmountL Smallmoney,
-@TotalAmountM Smallmoney,
-@TotalAmountN Smallmoney,
-@PastorWelfare Smallmoney,
-@CsrRunWzRc Smallmoney
+@OtherTithe Smallmoney = 0,
+@MinistersTithe Smallmoney = 0,
+@SundayLove Smallmoney = 0,
+@Thanksgiving Smallmoney = 0,
+@CRM Smallmoney = 0,
+@JuniorChurch Smallmoney = 0,
+@FirstFruit Smallmoney = 0,
+@RedemptionFirstBorn Smallmoney = 0,
+@HouseFellowship Smallmoney = 0,
+@ProvinceMission Smallmoney = 0,
+@SundaySchool Smallmoney = 0,
+@GospelFund Smallmoney = 0,
+@NationalWeekend Smallmoney = 0,
+@PastorWelfare Smallmoney = 0,
+@CsrRunWzRc Smallmoney = 0
 As
 Begin
 Update Section
-Set TotalAmount = @TotalAmountA
+Set TotalAmount = @OtherTithe
 where Label = 'A'
 
 Update Section
-Set TotalAmount = @TotalAmountB
+Set TotalAmount = @MinistersTithe
 where Label = 'B'
 
 Update Section
-Set TotalAmount = @TotalAmountD
+Set TotalAmount = @SundayLove
 where Label = 'D'
 
 Update Section
-Set TotalAmount = @TotalAmountE
+Set TotalAmount = @Thanksgiving
 where Label = 'E'
 
 Update Section
-Set TotalAmount = @TotalAmountF
+Set TotalAmount = @CRM
 where Label = 'F'
 
 Update Section
-Set TotalAmount = @TotalAmountG
+Set TotalAmount = @JuniorChurch
 where Label = 'G'
 
 Update Section
-Set TotalAmount = @TotalAmountH
+Set TotalAmount = @FirstFruit
 where Label = 'H'
 
 Update Section
-Set TotalAmount = @TotalAmountI
+Set TotalAmount = @RedemptionFirstBorn
 where Label = 'I'
 
 Update Section
-Set TotalAmount = @TotalAmountJ
+Set TotalAmount = @HouseFellowship
 where Label = 'J'
 
 Update Section
-Set TotalAmount = @TotalAmountK
+Set TotalAmount = @ProvinceMission
 where Label = 'K'
 
 Update Section
-Set TotalAmount = @TotalAmountL
+Set TotalAmount = @SundaySchool
 where Label = 'L'
 
 Update Section
-Set TotalAmount = @TotalAmountM
+Set TotalAmount = @GospelFund
 where Label = 'M'
 
 Update Section
-Set TotalAmount = @TotalAmountN
+Set TotalAmount = @NationalWeekend
 where Label = 'N'
 
 Update Section
@@ -981,22 +981,20 @@ Exec GenerateRemittanceGrandTotal
 ---End of the update procedure
 --------------These 100% only is needed to generate all the values for the remittance sheet front and back----------
 -----------We will not put continental tithe since it generate it y itself------------
+ 
  Exec UpdateSection
-@TotalAmountA = 1500,
-@TotalAmountB = 6000,
-@TotalAmountD = 7570,
-@TotalAmountE = 1200,
-@TotalAmountF = 1800,
-@TotalAmountG = 300, 
-@TotalAmountH = 0,
-@TotalAmountI = 0,
-@TotalAmountJ = 500,
-@TotalAmountK = 100,
-@TotalAmountL = 700,
-@TotalAmountM = 550,
-@TotalAmountN = 0,
-@PastorWelfare = 0,
+@OtherTithe = 51900,
+@MinistersTithe = 57000,
+@SundayLove = 9480,
+@Thanksgiving = 7520,
+@CRM = 2470,
+@JuniorChurch = 2230,
+@FirstFruit = 0,
+@RedemptionFirstBorn = 0,
+@HouseFellowship = 0,
+@ProvinceMission = 0,
+@SundaySchool = 920,
+@GospelFund = 2920,
+@NationalWeekend = 0,
+@PastorWelfare = 1015,
 @CsrRunWzRc = 2500
------------------------------
-
-
